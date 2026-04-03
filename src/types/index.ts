@@ -21,7 +21,7 @@ export interface Movie {
   cast?: string[]
   platforms: PlatformName[]
   trailer_key?: string
-  source?: 'justwatch' | 'ai' | 'fallback'
+  source?: 'justwatch' | 'watchmode' | 'ai' | 'fallback' | 'unknown'
 }
 
 export type PlatformName =
