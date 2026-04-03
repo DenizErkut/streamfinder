@@ -73,7 +73,7 @@ export default function Home() {
     const params = new URLSearchParams({
       q,
       type: filters.type === 'all' ? '' : filters.type,
-      platforms: [...activePlatforms].join(','),
+      platforms: Array.from(activePlatforms).join(','),
     })
     const res = await fetch(`/api/search?${params}`)
     if (!res.ok) throw new Error('search failed')
