@@ -62,7 +62,7 @@ function extractPlatforms(offers: any[], active: PlatformName[]): PlatformName[]
     else if (clear.includes('tabii'))     out.add('Tabii')
     else if (clear.includes('exxen'))     out.add('Exxen')
   }
-  return [...out].filter(p => active.includes(p))
+  return Array.from(out).filter(p => active.includes(p))
 }
 
 export async function getJustWatchPlatforms(
