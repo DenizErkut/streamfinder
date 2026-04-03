@@ -403,13 +403,40 @@ export default function Home() {
           </>
         )}
 
-        {/* TMDB Credit */}
-        <div className="flex items-center justify-center gap-2 mt-16 pt-8 border-t border-border1
-                        text-xs text-muted">
-          <span className="bg-[#01b4e4] text-white px-2 py-0.5 rounded text-[10px] font-bold tracking-wide">
-            TMDB
-          </span>
-          Bu ürün TMDB API&apos;sini kullanmaktadır • Platform verisi Claude AI desteklidir
+        {/* Footer */}
+        <div className="mt-16 pt-8 border-t border-border1">
+          {/* TMDB Credit */}
+          <div className="flex items-center justify-center gap-2 mb-6 text-xs text-muted">
+            <span className="bg-[#01b4e4] text-white px-2 py-0.5 rounded text-[10px] font-bold tracking-wide">
+              TMDB
+            </span>
+            Bu ürün TMDB API&apos;sini kullanmaktadır • Platform verisi Claude AI desteklidir
+          </div>
+
+          {/* Contact */}
+          <div className="flex flex-col items-center gap-3 pb-8">
+            <div className="flex items-center gap-6">
+              <a
+                href="https://instagram.com/kderkut"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-muted2 hover:text-text transition-colors text-sm"
+              >
+                <span className="text-lg">📸</span>
+                <span>@kderkut</span>
+              </a>
+              <a
+                href="mailto:denizerkut@icloud.com"
+                className="flex items-center gap-2 text-muted2 hover:text-text transition-colors text-sm"
+              >
+                <span className="text-lg">✉️</span>
+                <span>denizerkut@icloud.com</span>
+              </a>
+            </div>
+            <p className="text-xs text-muted">
+              © {new Date().getFullYear()} StreamFinder TR · Deniz Erkut tarafından yapılmıştır
+            </p>
+          </div>
         </div>
       </main>
 
