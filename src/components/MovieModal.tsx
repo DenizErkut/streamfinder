@@ -136,7 +136,7 @@ export default function MovieModal({ movie, inWatchlist, onToggleWL, onClose }: 
                   <p className="text-xs font-bold tracking-widest uppercase text-muted">
                     Türkiye'de Nereden İzle
                   </p>
-                  {movie.source === 'justwatch' && (
+                  {movie.source === 'watchmode' || movie.source === 'justwatch' && (
                     <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-green-900/30 border border-green-700/40 text-green-400 tracking-wider">
                       ✓ CANLI VERİ
                     </span>
