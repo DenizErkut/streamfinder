@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "StreamFinder TR",
+    "slug": "streamfinder-tr",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "streamfinder",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#05080f"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.denizerkut.streamfinder"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#05080f"
+      },
+      "package": "com.denizerkut.streamfinder"
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "8fd1ed48-c76d-4f42-9172-f4524e9ecc57"
+      }
+    }
+  }
+}

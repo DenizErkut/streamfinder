@@ -4,6 +4,7 @@ import { searchTMDB } from '@/lib/tmdb'
 import { detectPlatforms } from '@/lib/ai'
 import { getWatchmodeBatch } from '@/lib/watchmode'
 import type { PlatformName, MediaType } from '@/types'
+import { supabaseAdmin } from '@/lib/supabase'
 
 const ALL_TR: PlatformName[] = [
   'Netflix','Amazon Prime','Disney+','BluTV','GAIN','TOD','Tabii','MUBI','Exxen','Apple TV+'
@@ -59,7 +60,25 @@ export async function GET(req: NextRequest) {
       }
     })
 
-    return NextResponse.json({ results })
+    // Supabase override kontrolü — onaylanmış düzeltmeleri uygula
+    const tmdbIds = movies.map(m => m.id)
+    const { data: overrides } = await supabaseAdmin
+      .from('platform_overrides')
+      .select('*')
+      .in('tmdb_id', tmdbIds)
+
+    const finalResults = results.map(movie => {
+      const override = overrides?.find(
+        o => o.tmdb_id === movie.id && o.media_type === movie.media_type
+      )
+      if (override) {
+        console.log(`✅ Override: ${movie.title} → ${override.platforms.join(', ')}`)
+        return { ...movie, platforms: override.platforms, source: 'override' as const }
+      }
+      return movie
+    })
+
+    return NextResponse.json({ results: finalResults })
   } catch (err: any) {
     console.error('[search]', err?.message)
     return NextResponse.json({ error: err?.message }, { status: 500 })

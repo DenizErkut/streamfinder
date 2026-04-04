@@ -1,6 +1,8 @@
 'use client'
 // src/components/MovieModal.tsx
 import Image from 'next/image'
+import { useState } from 'react'
+import ReportModal from './ReportModal'
 import { useEffect } from 'react'
 import type { Movie } from '@/types'
 import { getPlatform } from '@/lib/platforms'
@@ -28,6 +30,7 @@ export default function MovieModal({ movie, inWatchlist, onToggleWL, onClose }: 
     return () => { document.body.style.overflow = '' }
   }, [movie])
 
+  const [showReport, setShowReport] = useState(false)
   if (!movie) return null
 
   const poster   = IMG(movie.poster_path, 'w342')
@@ -206,6 +209,14 @@ export default function MovieModal({ movie, inWatchlist, onToggleWL, onClose }: 
             {inWatchlist ? '✓ Listede' : '🔖 Listeye Ekle'}
           </button>
           <button
+            onClick={() => setShowReport(true)}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold
+                       bg-s2 border border-border2 text-muted hover:text-red-400
+                       hover:border-red-800 transition-all"
+          >
+            ⚠️ Hata Bildir
+          </button>
+          <button
             onClick={onClose}
             className="ml-auto px-4 py-2 rounded-xl text-sm font-semibold
                        bg-s2 border border-border2 text-muted2 hover:text-text
@@ -213,6 +224,7 @@ export default function MovieModal({ movie, inWatchlist, onToggleWL, onClose }: 
           >
             Kapat
           </button>
+          {showReport && <ReportModal movie={movie} onClose={() => setShowReport(false)} />}
         </div>
       </div>
     </div>
