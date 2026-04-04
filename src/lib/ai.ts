@@ -38,8 +38,8 @@ const TR_DB: Array<{ keywords: string[]; platforms: PlatformName[] }> = [
   { keywords: ['suits'],                      platforms: ['Netflix'] },
   { keywords: ['dark'],                       platforms: ['Netflix'] },
   { keywords: ['you '],                       platforms: ['Netflix'] },
-  { keywords: ['inception'],                  platforms: ['Netflix'] },
-  { keywords: ['interstellar'],               platforms: ['Netflix'] },
+  { keywords: ['inception'],                  platforms: ['Netflix', 'Amazon Prime'] },
+  { keywords: ['interstellar'],               platforms: ['Netflix', 'Amazon Prime'] },
   { keywords: ['daredevil'],                  platforms: ['Netflix'] },
   // ── Amazon Prime TR (kesin) ───────────────────────────────────────────
   { keywords: ['the boys'],                   platforms: ['Amazon Prime'] },
@@ -124,7 +124,7 @@ const TR_DB: Array<{ keywords: string[]; platforms: PlatformName[] }> = [
   { keywords: ['tivibu'],                      platforms: ['Tivibu'] },
   { keywords: ['yüksek sosyete'],             platforms: ['Exxen'] },
   // ── MUBI TR (kesin) ───────────────────────────────────────────────────
-  { keywords: ['parasite'],                   platforms: ['MUBI'] },
+  { keywords: ['parasite'],                   platforms: ['MUBI', 'Amazon Prime'] },
   { keywords: ['past lives'],                 platforms: ['MUBI'] },
   { keywords: ['aftersun'],                   platforms: ['MUBI'] },
   { keywords: ['tár'],                        platforms: ['MUBI'] },
