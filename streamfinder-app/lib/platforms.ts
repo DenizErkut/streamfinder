@@ -7,7 +7,6 @@ export const PLATFORMS: PlatformConfig[] = [
   { name: 'Netflix',      color: '#E50914', getUrl: t => `https://www.netflix.com/tr/search?q=${enc(t)}` },
   { name: 'Amazon Prime', color: '#00A8E1', getUrl: t => `https://www.primevideo.com/search/?phrase=${enc(t)}` },
   { name: 'Disney+',      color: '#6b8eff', getUrl: t => `https://www.disneyplus.com/tr-tr/search?q=${enc(t)}` },
-  { name: 'HBO Max',      color: '#a855f7', getUrl: t => `https://play.max.com/search?q=${enc(t)}` },
   { name: 'Apple TV+',    color: '#c8c8c8', getUrl: t => `https://tv.apple.com/search?term=${enc(t)}` },
   { name: 'BluTV',        color: '#3b82f6', getUrl: t => `https://www.blutv.com/arama?q=${enc(t)}` },
   { name: 'GAIN',         color: '#ff6b00', getUrl: t => `https://www.gain.tv/search?q=${enc(t)}` },
