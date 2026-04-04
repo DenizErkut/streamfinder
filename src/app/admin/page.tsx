@@ -71,6 +71,8 @@ export default function AdminPage() {
         media_type: report.media_type,
         platforms,
         report_id: report.id,
+        action: report.action,
+        reported_platform: report.reported_platform,
       }),
     })
     if (res.ok) {

@@ -1,5 +1,4 @@
 // src/app/api/overrides/route.ts
-// Onaylanmış platform düzeltmelerini getir
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 
@@ -14,14 +13,12 @@ export async function GET(req: NextRequest) {
 
     const { data, error } = await query
     if (error) throw error
-
     return NextResponse.json({ overrides: data || [] })
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }
 
-// Admin: bildirimi onayla ve override ekle
 export async function POST(req: NextRequest) {
   const adminKey = req.headers.get('x-admin-key')
   if (adminKey !== process.env.ADMIN_SECRET) {
@@ -29,12 +26,42 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { tmdb_id, media_type, platforms, report_id } = await req.json()
+    const { tmdb_id, media_type, platforms, report_id, action, reported_platform } = await req.json()
 
-    // Override ekle veya güncelle
+    // Mevcut override'ı getir
+    const { data: existing } = await supabaseAdmin
+      .from('platform_overrides')
+      .select('platforms')
+      .eq('tmdb_id', tmdb_id)
+      .eq('media_type', media_type)
+      .single()
+
+    let finalPlatforms: string[]
+
+    if (platforms) {
+      // Admin manuel seçtiyse direkt kullan
+      finalPlatforms = platforms
+    } else if (action === 'remove' && reported_platform) {
+      // Çıkarma işlemi — mevcut listeden kaldır
+      const current = existing?.platforms || []
+      finalPlatforms = current.filter((p: string) => p !== reported_platform)
+    } else if (action === 'add' && reported_platform) {
+      // Ekleme işlemi — mevcut listeye ekle
+      const current = existing?.platforms || []
+      finalPlatforms = [...new Set([...current, reported_platform])]
+    } else {
+      finalPlatforms = platforms || []
+    }
+
+    // Override kaydet
     const { error: upsertErr } = await supabaseAdmin
       .from('platform_overrides')
-      .upsert({ tmdb_id, media_type, platforms, updated_at: new Date().toISOString() })
+      .upsert({
+        tmdb_id,
+        media_type,
+        platforms: finalPlatforms,
+        updated_at: new Date().toISOString()
+      })
     if (upsertErr) throw upsertErr
 
     // Bildirimi onayla
@@ -45,7 +72,7 @@ export async function POST(req: NextRequest) {
         .eq('id', report_id)
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true, platforms: finalPlatforms })
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 })
   }
