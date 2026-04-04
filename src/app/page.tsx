@@ -45,6 +45,8 @@ type ResultState = 'idle' | 'loading' | 'results' | 'empty' | 'error'
 export default function Home() {
   // --- State ---
   const [query, setQuery]           = useState('')
+  const [suggestions, setSuggestions] = useState<{id:number;title:string;year:number;type:string}[]>([])
+  const [showSugg, setShowSugg]     = useState(false)
   const [activeTab, setActiveTab]   = useState<TabId>('search')
   const [results, setResults]       = useState<Movie[]>([])
   const [resultState, setRS]        = useState<ResultState>('idle')
@@ -96,6 +98,19 @@ export default function Home() {
   }, [])
 
   // --- Actions ---
+  // Fetch suggestions as user types
+  const fetchSuggestions = useCallback(async (q: string) => {
+    if (q.length < 2) { setSuggestions([]); return }
+    try {
+      const res = await fetch(`/api/suggest?q=${encodeURIComponent(q)}`)
+      if (res.ok) {
+        const data = await res.json()
+        setSuggestions(data.results || [])
+        setShowSugg(true)
+      }
+    } catch {}
+  }, [])
+
   const doSearch = async () => {
     const q = query.trim()
     if (!q) { inputRef.current?.focus(); return }
@@ -238,7 +253,7 @@ export default function Home() {
         </div>
 
         {/* ── SEARCH BOX ── */}
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-2xl mx-auto relative">
           <div className={`flex items-center gap-2 bg-s2 border rounded-2xl px-5 py-2
                           transition-all duration-300
                           ${query ? 'border-acc shadow-[0_0_0_3px_rgba(240,165,0,0.12)]' : 'border-border2'}`}>
@@ -246,7 +261,12 @@ export default function Home() {
               ref={inputRef}
               type="text"
               value={query}
-              onChange={e => setQuery(e.target.value)}
+              onChange={e => {
+                setQuery(e.target.value)
+                fetchSuggestions(e.target.value)
+              }}
+              onBlur={() => setTimeout(() => setShowSugg(false), 150)}
+              onFocus={() => query.length >= 2 && setShowSugg(true)}
               onKeyDown={e => e.key === 'Enter' && doSearch()}
               placeholder="Film veya dizi adı… (ör: Inception, Squid Game, Atatürk)"
               className="flex-1 bg-transparent outline-none text-text text-base py-3
@@ -267,7 +287,31 @@ export default function Home() {
             </button>
           </div>
 
-          {/* ── FILTERS ── */}
+          {/* ── SUGGESTIONS DROPDOWN ── */}
+          {showSugg && suggestions.length > 0 && (
+            <div className="absolute top-full left-0 right-0 mt-2 bg-s2 border border-border2
+                            rounded-2xl overflow-hidden shadow-2xl z-50">
+              {suggestions.map((s, i) => (
+                <button
+                  key={s.id}
+                  className="w-full flex items-center gap-3 px-5 py-3 text-left
+                             hover:bg-s3 transition-colors border-b border-border1 last:border-0"
+                  onMouseDown={() => {
+                    setQuery(s.title)
+                    setShowSugg(false)
+                    setSuggestions([])
+                    setTimeout(() => doSearch(), 50)
+                  }}
+                >
+                  <span className="text-muted text-sm">{s.type === 'tv' ? '📺' : '🎬'}</span>
+                  <span className="flex-1 text-text text-sm font-medium">{s.title}</span>
+                  {s.year > 0 && <span className="text-muted text-xs">{s.year}</span>}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* ── FILTERS ── */}}
           <div className="flex flex-wrap gap-2 justify-center mt-3">
             <select
               value={filters.type}
