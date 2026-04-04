@@ -85,6 +85,22 @@ export const PLATFORMS: PlatformConfig[] = [
     borderClass: 'border-gray-600/40',
     getUrl: t => `https://tv.apple.com/tr/search?term=${enc(t)}`,
   },
+  {
+    name: 'TV+',
+    color: '#00b4d8',
+    bgClass: 'bg-cyan-900/20',
+    textClass: 'text-cyan-400',
+    borderClass: 'border-cyan-600/40',
+    getUrl: t => `https://www.tvplus.com.tr/search?q=${enc(t)}`,
+  },
+  {
+    name: 'Tivibu',
+    color: '#e63946',
+    bgClass: 'bg-red-900/20',
+    textClass: 'text-red-400',
+    borderClass: 'border-red-700/40',
+    getUrl: t => `https://www.tivibu.com.tr/arama?q=${enc(t)}`,
+  },
 ]
 
 export const getPlatform = (name: PlatformName): PlatformConfig | undefined =>
