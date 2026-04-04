@@ -311,7 +311,7 @@ export default function Home() {
             </div>
           )}
 
-          {/* ── FILTERS ── */}}
+          {/* ── FILTERS ── */}
           <div className="flex flex-wrap gap-2 justify-center mt-3">
             <select
               value={filters.type}
