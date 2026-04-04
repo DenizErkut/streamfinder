@@ -47,6 +47,18 @@ export default function AdminPage() {
     setLoading(false)
   }
 
+  const reject = async (report: Report) => {
+    const { createClient } = await import('@supabase/supabase-js')
+    const sb = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
+    await sb.from('platform_reports').update({ confirmed: true }).eq('id', report.id)
+    setMsg(`❌ "${report.title}" reddedildi`)
+    loadReports()
+    setTimeout(() => setMsg(''), 3000)
+  }
+
   const approve = async (report: Report, platforms: PlatformName[]) => {
     const res = await fetch('/api/overrides', {
       method: 'POST',
@@ -125,7 +137,7 @@ export default function AdminPage() {
         ) : (
           <div className="space-y-3 mb-8">
             {pending.map(r => (
-              <ReportCard key={r.id} report={r} adminKey={key} onApprove={approve} />
+              <ReportCard key={r.id} report={r} adminKey={key} onApprove={approve} onReject={reject} />
             ))}
           </div>
         )}
@@ -150,10 +162,11 @@ export default function AdminPage() {
   )
 }
 
-function ReportCard({ report, adminKey, onApprove }: {
+function ReportCard({ report, adminKey, onApprove, onReject }: {
   report: Report
   adminKey: string
   onApprove: (r: Report, platforms: PlatformName[]) => void
+  onReject: (r: Report) => void
 }) {
   const [selectedPlatforms, setSelected] = useState<PlatformName[]>(
     [report.reported_platform as PlatformName]
@@ -211,13 +224,23 @@ function ReportCard({ report, adminKey, onApprove }: {
         ))}
       </div>
 
-      <button
-        onClick={() => onApprove(report, selectedPlatforms)}
-        className="px-4 py-2 rounded-xl text-sm font-bold text-black
-                   bg-gradient-to-r from-acc to-acc2 hover:opacity-90 transition-all"
-      >
-        ✅ Onayla ve Kaydet
-      </button>
+      <div className="flex gap-3">
+        <button
+          onClick={() => onApprove(report, selectedPlatforms)}
+          className="px-4 py-2 rounded-xl text-sm font-bold text-black
+                     bg-gradient-to-r from-acc to-acc2 hover:opacity-90 transition-all"
+        >
+          ✅ Onayla ve Kaydet
+        </button>
+        <button
+          onClick={() => onReject(report)}
+          className="px-4 py-2 rounded-xl text-sm font-bold
+                     bg-red-900/30 border border-red-700/50 text-red-400
+                     hover:bg-red-900/50 transition-all"
+        >
+          ❌ Reddet
+        </button>
+      </div>
     </div>
   )
 }
