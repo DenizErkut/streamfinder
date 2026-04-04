@@ -11,6 +11,7 @@ interface PlatformResult {
 // Kural: Şüpheli olan HİÇ eklenmez. Yanlış bilgi = sıfır güven.
 const TR_DB: Array<{ keywords: string[]; platforms: PlatformName[] }> = [
   // ── Netflix TR (kesin) ────────────────────────────────────────────────
+  { keywords: ['humint'],                     platforms: ['Netflix'] },
   { keywords: ['stranger things'],            platforms: ['Netflix'] },
   { keywords: ['wednesday'],                  platforms: ['Netflix'] },
   { keywords: ['squid game'],                 platforms: ['Netflix'] },
@@ -115,6 +116,12 @@ const TR_DB: Array<{ keywords: string[]; platforms: PlatformName[] }> = [
   { keywords: ['bir küçük gün işiği'],        platforms: ['BluTV'] },
   // ── Exxen TR (kesin) ──────────────────────────────────────────────────
   { keywords: ['survivor'],                   platforms: ['Exxen'] },
+  // TV+ (Turkcell)
+  { keywords: ['dexter new blood'],            platforms: ['TV+'] },
+  { keywords: ['yellowstone'],                 platforms: ['TV+'] },
+  { keywords: ['1883'],                        platforms: ['TV+'] },
+  // Tivibu (Türk Telekom)
+  { keywords: ['tivibu'],                      platforms: ['Tivibu'] },
   { keywords: ['yüksek sosyete'],             platforms: ['Exxen'] },
   // ── MUBI TR (kesin) ───────────────────────────────────────────────────
   { keywords: ['parasite'],                   platforms: ['MUBI'] },

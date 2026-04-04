@@ -7,7 +7,7 @@ import type { PlatformName, MediaType } from '@/types'
 import { supabaseAdmin } from '@/lib/supabase'
 
 const ALL_TR: PlatformName[] = [
-  'Netflix','Amazon Prime','Disney+','BluTV','GAIN','TOD','Tabii','MUBI','Exxen','Apple TV+'
+  'Netflix','Amazon Prime','Disney+','BluTV','GAIN','TOD','Tabii','MUBI','Exxen','Apple TV+','TV+','Tivibu'
 ]
 
 export async function GET(req: NextRequest) {

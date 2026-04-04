@@ -92,8 +92,8 @@ export const getPlatform = (name: PlatformName): PlatformConfig | undefined =>
 
 // Varsayılan: hepsi aktif
 export const DEFAULT_ACTIVE: PlatformName[] = [
-  'Netflix', 'Amazon Prime', 'Disney+',
-  'BluTV', 'GAIN', 'TOD', 'Tabii', 'MUBI', 'Exxen', 'Apple TV+',
+  'Netflix', 'Amazon Prime', 'Disney+', 'Apple TV+',
+  'BluTV', 'GAIN', 'TOD', 'Tabii', 'MUBI', 'Exxen', 'TV+', 'Tivibu',
 ]
 
 export const GENRES: Record<number, string> = {

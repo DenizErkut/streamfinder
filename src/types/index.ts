@@ -35,6 +35,8 @@ export type PlatformName =
   | 'MUBI'
   | 'Exxen'
   | 'Apple TV+'
+  | 'TV+'
+  | 'Tivibu'
 
 export interface PlatformConfig {
   name: PlatformName

@@ -6,7 +6,7 @@ import { getWatchmodeBatch } from '@/lib/watchmode'
 import type { PlatformName } from '@/types'
 
 const ALL_TR: PlatformName[] = [
-  'Netflix','Amazon Prime','Disney+','BluTV','GAIN','TOD','Tabii','MUBI','Exxen','Apple TV+'
+  'Netflix','Amazon Prime','Disney+','BluTV','GAIN','TOD','Tabii','MUBI','Exxen','Apple TV+','TV+','Tivibu'
 ]
 
 export async function GET() {
