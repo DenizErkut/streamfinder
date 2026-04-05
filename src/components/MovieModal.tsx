@@ -16,6 +16,10 @@ interface Props {
 }
 
 export default function MovieModal({ movie, inWatchlist, onToggleWL, onClose }: Props) {
+  const [showReport, setShowReport] = useState(false)
+  const [platforms, setPlatforms]   = useState(movie?.platforms || [])
+  const [detecting, setDetecting]   = useState(false)
+
   // Close on Escape
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -30,7 +34,29 @@ export default function MovieModal({ movie, inWatchlist, onToggleWL, onClose }: 
     return () => { document.body.style.overflow = '' }
   }, [movie])
 
-  const [showReport, setShowReport] = useState(false)
+  // Platform tespiti — modal açılınca çalışır
+  useEffect(() => {
+    if (!movie) return
+    setPlatforms(movie.platforms || [])
+
+    // Eğer platform bilgisi yoksa veya boşsa, anlık tespit et
+    if (!movie.platforms || movie.platforms.length === 0) {
+      setDetecting(true)
+      fetch(`/api/search?q=${encodeURIComponent(movie.title)}&type=${movie.media_type}`)
+        .then(r => r.json())
+        .then(data => {
+          const match = (data.results || []).find(
+            (r: any) => r.id === movie.id && r.media_type === movie.media_type
+          )
+          if (match?.platforms?.length > 0) {
+            setPlatforms(match.platforms)
+          }
+        })
+        .catch(() => {})
+        .finally(() => setDetecting(false))
+    }
+  }, [movie?.id])
+
   if (!movie) return null
 
   const poster   = IMG(movie.poster_path, 'w342')
@@ -133,13 +159,18 @@ export default function MovieModal({ movie, inWatchlist, onToggleWL, onClose }: 
             </p>
 
             {/* Platforms */}
-            {movie.platforms.length > 0 ? (
+            {detecting ? (
+              <div className="flex items-center gap-2 text-muted text-sm mb-4">
+                <div className="w-3 h-3 border border-muted2 border-t-acc rounded-full animate-spin"/>
+                <span>Platform kontrol ediliyor…</span>
+              </div>
+            ) : platforms.length > 0 ? (
               <>
                 <div className="flex items-center gap-2 mb-3">
                   <p className="text-xs font-bold tracking-widest uppercase text-muted">
                     Türkiye'de Nereden İzle
                   </p>
-                  {movie.source === 'watchmode' || movie.source === 'justwatch' && (
+                  {(movie.source === 'watchmode' || movie.source === 'justwatch') && (
                     <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-green-900/30 border border-green-700/40 text-green-400 tracking-wider">
                       ✓ CANLI VERİ
                     </span>
@@ -151,7 +182,7 @@ export default function MovieModal({ movie, inWatchlist, onToggleWL, onClose }: 
                   )}
                 </div>
                 <div className="flex flex-wrap gap-2.5 mb-2">
-                  {movie.platforms.map(pName => {
+                  {platforms.map(pName => {
                     const cfg = getPlatform(pName)
                     if (!cfg) return null
                     return (
@@ -176,7 +207,7 @@ export default function MovieModal({ movie, inWatchlist, onToggleWL, onClose }: 
               </>
             ) : (
               <p className="text-sm text-muted">
-                ⚠️ Türkiye'deki seçili platformlarda yayın bilgisi bulunamadı.
+                ⚠️ Türkiye'deki platformlarda yayın bilgisi bulunamadı.
               </p>
             )}
 
